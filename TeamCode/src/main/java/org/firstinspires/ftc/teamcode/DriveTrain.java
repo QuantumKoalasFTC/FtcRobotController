@@ -3,44 +3,54 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.Gyroscope;
-import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
-
 public class DriveTrain extends LinearOpMode {
-    private Gyroscope imu;
-    private DcMotor motorTest;
-    private DigitalChannel digitalTouch;
-    private DistanceSensor sensorColorRange;
-    private Servo servoTest;
 
-
-    @Override
     public void runOpMode() {
-        imu = hardwareMap.get(Gyroscope.class, "imu");
-        motorTest = hardwareMap.get(DcMotor.class, "motorTest");
-        digitalTouch = hardwareMap.get(DigitalChannel.class, "digitalTouch");
-        sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
-        servoTest = hardwareMap.get(Servo.class, "servoTest");
 
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-        // Wait for the game to start (driver presses PLAY)
+        DcMotor fl = hardwareMap.get(DcMotor.class, "front_left_drive");
+        DcMotor bl = hardwareMap.get(DcMotor.class, "back_left_drive");
+        DcMotor fr = hardwareMap.get(DcMotor.class, "front_right_drive");
+        DcMotor br = hardwareMap.get(DcMotor.class, "back_right_drive");
+
+        DcMotor intakeMotor = hardwareMap.get(DcMotor.class, "intake_motor");
+        DcMotor shooterMotor = hardwareMap.get(DcMotor.class, "shooter_motor");
+
+        fl.setDirection(DcMotor.Direction.REVERSE);
+        bl.setDirection(DcMotor.Direction.REVERSE);
+
+        double multiplier = 1.0;
+
         waitForStart();
 
-        // run until the end of the match (driver presses STOP)
-        double tgtPower = 0;
         while (opModeIsActive()) {
-            tgtPower = -this.gamepad1.left_stick_y;
-            motorTest.setPower(tgtPower);
-            telemetry.addData("Target Power", tgtPower);
-            telemetry.addData("Motor Power", motorTest.getPower());
-            telemetry.addData("Status", "Running");
-            telemetry.update();
 
+            // Drive
+            double power = -gamepad1.right_stick_y;
+            double powerst = gamepad1.right_stick_x;
+            double turn = gamepad1.left_stick_x;
+
+            double flPower = power + powerst + turn;
+            double blPower = power - powerst + turn;
+            double frPower = power - powerst - turn;
+            double brPower = power + powerst - turn;
+
+            
+            fl.setPower(flPower);
+            bl.setPower(blPower);
+            fr.setPower(frPower);
+            br.setPower(brPower);
+
+
+            // Shooter and intake
+            shooterMotor.setPower(gamepad1.right_trigger);
+            intakeMotor.setPower(gamepad1.left_trigger);
+
+
+            telemetry.addData("Right Trigger", gamepad1.right_trigger);
+            telemetry.addData("Left Trigger", gamepad1.left_trigger);
+            telemetry.update();
         }
     }
 }
