@@ -57,7 +57,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Since the dynamics of a launcher wheel system varies greatly from those of most other FTC mechanisms,
  * we will also need to adjust the "PIDF" coefficients with some that are a better fit for our application.
  */
-
+//easter egg//
 @TeleOp(name = "StarterBotTeleop", group = "StarterBot")
 //@Disabled
 public class StarterBotTeleop extends OpMode {
@@ -197,6 +197,7 @@ public class StarterBotTeleop extends OpMode {
     /*
      * Code to run REPEATEDLY after the driver hits START but before they hit STOP
      */
+    //easter egg//
     @Override
     public void loop() {
         /*
