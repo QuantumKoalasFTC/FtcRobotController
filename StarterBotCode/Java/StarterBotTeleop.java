@@ -64,6 +64,7 @@ public class StarterBotTeleop extends OpMode {
     final double FEED_TIME_SECONDS = 0.20; //The feeder servos run this long when a shot is requested.
     final double STOP_SPEED = 0.0; //We send this power to the servos when we want them to stop.
     final double FULL_SPEED = 1.0;
+    final double SLOW_SPEED = 0.5;
 
     /*
      * When we control our launcher motor, we are using encoders. These allow the control system
@@ -99,6 +100,7 @@ public class StarterBotTeleop extends OpMode {
      * We can use higher level code to cycle through these states. But this allows us to write
      * functions and autonomous routines in a way that avoids loops within loops, and "waits".
      */
+
     private enum LaunchState {
         IDLE,
         SPIN_UP,
