@@ -36,8 +36,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * Chassis/Intake for the 2026-2027 FIRST® Tech Challenge. It leverages a mecanum drive system for
  * robot mobility, one motor driving an intake roller, and two servos which pull elements out of corners.
  */
-
-@TeleOp(name = "StarterBot Mecanum Chassis Teleop", group = "StarterBot")
+@TeleOp(name = "StarterBot Mecanum Chassis Teleop")
 //@Disabled
 public class StarterBotMecChassisTeleop extends OpMode {
 
@@ -85,10 +84,10 @@ public class StarterBotMecChassisTeleop extends OpMode {
          * Note: The settings here assume direct drive on left and right wheels. Gear
          * Reduction or 90 Deg drives may require direction flips
          */
-        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        leftBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         /*
          * Setting zeroPowerBehavior to BRAKE enables a "brake mode". This causes the motor to
@@ -173,7 +172,7 @@ public class StarterBotMecChassisTeleop extends OpMode {
          */
         telemetry.addData("Motors", "FL (%.2f), FR (%.2f), BL(%.2f), BR(%.2f)",
                 leftFrontPower, rightFrontPower, leftBackPower, rightBackPower);
-        telemetry.addData("Triggers", "left (%.2f, right (%.2f)",gamepad1.left_trigger, gamepad1.right_trigger);
+        telemetry.addData("Triggers", "left (%.2f, right (%.2f)", gamepad1.left_trigger, gamepad1.right_trigger);
 
     }
 
@@ -185,7 +184,6 @@ public class StarterBotMecChassisTeleop extends OpMode {
     }
 
     void mecanumDrive(double forward, double strafe, double rotate){
-
         /* the denominator is the largest motor power (absolute value) or 1
          * This ensures all the powers maintain the same ratio,
          * but only if at least one is out of the range [-1, 1]
