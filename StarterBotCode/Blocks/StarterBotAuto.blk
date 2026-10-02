@@ -1,0 +1,1973 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+<variables>
+<variable id="R1p8ZGSf(!fY*rRg44Ho">shotRequested</variable>
+<variable id="q[8.]kpElm61_KaFpm`~">distanceInches</variable>
+<variable id="5(Bd2#|Wx7jvb5JU!.L{">LAUNCH_BALLS</variable>
+<variable id="nMgyqqS4Uixlpht[g:R-">IDLE</variable>
+<variable id="]S)PL/wEu]1;!|GnHG[J">LAUNCHER_TARGET_VELOCITY</variable>
+<variable id="47t4-[rJjQ6-J|Lf%-v1">rotationTargetTicks</variable>
+<variable id="!%c1bf0x,y8|CNPu:oCa">WAIT_FOR_LAUNCH</variable>
+<variable id="w,7_*qy5Glk{UW}D)]gB">SPIN_UP</variable>
+<variable id=":Cc`(*(:-B;b)+pUI4T$">LAUNCHER_MIN_VELOCITY</variable>
+<variable id="v)^?2P!;29$x)=@0hrAW">holdSeconds</variable>
+<variable id="eBm$OiK)0yv/c[_GdYJY">DRIVING_AWAY_FROM_GOAL</variable>
+<variable id="~B4:?8{?ZlR1#rE3bI*R">LAUNCH</variable>
+<variable id="V~:KEZ9[=:IRl|jEaZ_*">launchState</variable>
+<variable id="MC+sAeG6|iz39~I2%:VB">LAUNCHING</variable>
+<variable id="C;!+]Z^;m{H6]I:%a9^6">TIME_BETWEEN_SHOTS</variable>
+<variable id="7P)rj);{=IWl{d,Yjg?}">TICKS_PER_INCH</variable>
+<variable id="iyi=$,jIh{9jRd7_fP:W">driveTimer</variable>
+<variable id="GUU1O#QlF!GxL7S}*61P">ROTATING</variable>
+<variable id=";hB6x{lEE9~%ZK,$iK:7">DRIVE_SPEED</variable>
+<variable id="M8EMAoji*(C6up%%kuAZ">robotRotateAngle</variable>
+<variable id=".1jHP[]ZEXIL8D7ilE7v">TRACK_WIDTH_INCHES</variable>
+<variable id="K:4K_zz6c=4T[,y~5+1A">DRIVING_OFF_LINE</variable>
+<variable id=")x2nrJ|T7ynBlN]w9E}k">shotTimer</variable>
+<variable id="03f4X?|!?FWF8$:THT1_">feederTimer</variable>
+<variable id="qK`G6fdDE%x_#YrQ3Cf~">ROTATE_SPEED</variable>
+<variable id="[4YasN_zUNQBy^4,;VB-">COMPLETE</variable>
+<variable id="`/c0*hW+ZKXfBMbeLVI{">WHEEL_DIAMETER_MM</variable>
+<variable id="(:4G=0UOS^5hnuwi(rV^">alliance</variable>
+<variable id="~V=ciD%YB#vC_Bs!MzE-">autoStateMachine</variable>
+<variable id="]F`]vpA4r=JQ1IN3)*^3">ENCODER_TICKS_PER_REV</variable>
+<variable id="aSKlx8xg%G{_}sd3MDn,">RED</variable>
+<variable id="c$Fo2f2:EUA/ozJYrOTl">BLUE</variable>
+<variable id="OmW!vl;j|Pl_|L50r#$O">shotsToFire</variable>
+<variable id="lQaI@JFXkw95i+{(fo^`">DRIVE_TOLERANCE</variable>
+</variables>
+<block type="procedures_defnoreturn" id="WtpyD@tEu+EoY=P9iY,D" deletable="false" x="-497" y="-512">
+<field name="NAME">runOpMode</field>
+<comment pinned="true" h="256" w="575">
+This file includes an autonomous file for the goBILDA® StarterBot for the
+2025-2026 FIRST® Tech Challenge season DECODE™. It leverages a differential/Skid-Steer system for robot mobility, one high-speed motor driving two "launcher wheels," and two servos which feed that launcher.
+This robot starts up against the goal and launches all three projectiles before driving away off the starting line. This program leverages a "state machine" - an Enum (or in Blocks a series of variables which capture the state of the robot at any time. As it moves through the autonomous period and completes different functions, it will move forward in the enum. This allows us to run the autonomous period inside of our main robot "loop," continuously checking for conditions that allow us to move to the next step.</comment>
+<data>{"commentPositionLeft":-448,"commentPositionTop":-330}</data>
+<statement name="STACK">
+<block type="procedures_callnoreturn" id="IHoo;|/1mtCJ7I]j!vbe">
+<mutation name="createAutoStateMachine"/>
+<next>
+<block type="procedures_callnoreturn" id="HcqIzq_R25.gnR%;kxk/">
+<mutation name="createLaunchStateMachine"/>
+<next>
+<block type="procedures_callnoreturn" id="!7BX;j{Kh7x~3=V]ejSY">
+<mutation name="createVariables"/>
+<next>
+<block type="procedures_callnoreturn" id="F]?h*{Azk)CmTyo`Tk{h">
+<mutation name="initMotors"/>
+<next>
+<block type="controls_whileUntil" id="?tTLJMAPvNl#xy37gF-K">
+<field name="MODE">WHILE</field>
+<value name="BOOL">
+<block type="linearOpMode_opModeInInit" id=":Fh6nV!Rc-zONrS}-Tfw"/>
+</value>
+<statement name="DO">
+<block type="controls_if" id="NenXQ.1@|hEfi%rE^9uc">
+<mutation elseif="1"/>
+<value name="IF0">
+<block type="gamepad_getProperty_Boolean" id="67v6`QvSFF282wvbP3%X">
+<field name="IDENTIFIER">gamepad1</field>
+<field name="PROP">B</field>
+<data>{"IDENTIFIER":"gamepad1"}</data>
+</block>
+</value>
+<statement name="DO0">
+<block type="variables_set" id="eM3E[(l2}9aT_LAjUnDi">
+<field name="VAR" id="(:4G=0UOS^5hnuwi(rV^">alliance</field>
+<value name="VALUE">
+<block type="variables_get" id=",#%QOlUS0FA+y3THTjyN">
+<field name="VAR" id="aSKlx8xg%G{_}sd3MDn,">RED</field>
+</block>
+</value>
+</block>
+</statement>
+<value name="IF1">
+<block type="gamepad_getProperty_Boolean" id="u;CErL[Lc?azCWMmX]]p">
+<field name="IDENTIFIER">gamepad1</field>
+<field name="PROP">X</field>
+<data>{"IDENTIFIER":"gamepad1"}</data>
+</block>
+</value>
+<statement name="DO1">
+<block type="variables_set" id="!R^5G.Kqh04ykdw.j[vk">
+<field name="VAR" id="(:4G=0UOS^5hnuwi(rV^">alliance</field>
+<value name="VALUE">
+<block type="variables_get" id="NTB1GN^UgXjGYbd$?[j]">
+<field name="VAR" id="c$Fo2f2:EUA/ozJYrOTl">BLUE</field>
+</block>
+</value>
+</block>
+</statement>
+<next>
+<block type="telemetry_addLine" id="+h:-uH`JCqm7@-PZv,6(">
+<value name="TEXT">
+<shadow type="text" id="W$_y,)Kevf9Dbc!RibE(">
+<field name="TEXT">Press B for Red Alliance</field>
+</shadow>
+</value>
+<next>
+<block type="telemetry_addLine" id="[A,A)s=+de@/hpg_i1/%">
+<value name="TEXT">
+<shadow type="text" id="~mnx?vn5@^!dQiSo`zVt">
+<field name="TEXT">Press X for Blue Alliance</field>
+</shadow>
+</value>
+<next>
+<block type="telemetry_addTextData_All" id="gSXB2lzNf}]1APp(KcfN">
+<value name="KEY">
+<shadow type="text" id="}s)+`htkoo.3sO^s(/p4">
+<field name="TEXT">Selected Alliance</field>
+</shadow>
+</value>
+<value name="TEXT">
+<shadow type="text" id="@w:pO00z2lZtUp(1u~b2">
+<field name="TEXT">text</field>
+</shadow>
+<block type="variables_get" id="fD)Pgxp0ng4,r8XVNhQk">
+<field name="VAR" id="(:4G=0UOS^5hnuwi(rV^">alliance</field>
+</block>
+</value>
+<next>
+<block type="telemetry_update" id="~=G,po?FK[agDQZh+rqH"/>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</statement>
+<next>
+<block type="linearOpMode_waitForStart" id=":`$wN_ci`O;o6P0~.(+g">
+<next>
+<block type="controls_if" id="}Q?5mbxSO8Di;i!__6[y">
+<value name="IF0">
+<block type="linearOpMode_opModeIsActive" id=")o%YFX/#9kvv^sgXr4~5"/>
+</value>
+<statement name="DO0">
+<block type="controls_whileUntil" id="^0Kagy/e+Ea{rbZPv2G6">
+<field name="MODE">WHILE</field>
+<value name="BOOL">
+<block type="linearOpMode_opModeIsActive" id="e)cr{!2VIET83s,JWC.="/>
+</value>
+<statement name="DO">
+<block type="controls_if" id="n.oJa9yJqJ}?z$oNzW6c">
+<mutation elseif="4"/>
+<value name="IF0">
+<block type="logic_compare" id="m9@f[v=GAE]L)RjC[jMQ">
+<field name="OP">EQ</field>
+<value name="A">
+<block type="variables_get" id="^1uy[dT3od{eW`~3P^PX">
+<field name="VAR" id="~V=ciD%YB#vC_Bs!MzE-">autoStateMachine</field>
+</block>
+</value>
+<value name="B">
+<block type="variables_get" id="#N1kKir_$SaLZKIy9KH9">
+<field name="VAR" id="5(Bd2#|Wx7jvb5JU!.L{">LAUNCH_BALLS</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO0">
+<block type="misc_evaluateButIgnoreResult" id="wpNV-l|QCM;;J6QVySp4">
+<value name="VALUE">
+<block type="procedures_callreturn" id=".``E9kBO-_1+^2XPYUn2">
+<mutation name="launch">
+<arg name="shotRequested"/>
+</mutation>
+<value name="ARG0">
+<block type="logic_boolean" id="KRQOmwKP9[@!P;JG7*/1">
+<field name="BOOL">TRUE</field>
+</block>
+</value>
+</block>
+</value>
+<next>
+<block type="variables_set" id="Ymmj;C2p;M-K~iqtN_+E">
+<field name="VAR" id="~V=ciD%YB#vC_Bs!MzE-">autoStateMachine</field>
+<value name="VALUE">
+<block type="variables_get" id="J%_cW:ogFForduSB3?Rz">
+<field name="VAR" id="!%c1bf0x,y8|CNPu:oCa">WAIT_FOR_LAUNCH</field>
+</block>
+</value>
+</block>
+</next>
+</block>
+</statement>
+<value name="IF1">
+<block type="logic_compare" id="xz`d2jl*e7G,leq3@g6M">
+<field name="OP">EQ</field>
+<value name="A">
+<block type="variables_get" id="(+:05mMiJN`TGG5{|##:">
+<field name="VAR" id="~V=ciD%YB#vC_Bs!MzE-">autoStateMachine</field>
+</block>
+</value>
+<value name="B">
+<block type="variables_get" id="=B]:NhnAK}-_$-NUUd1H">
+<field name="VAR" id="!%c1bf0x,y8|CNPu:oCa">WAIT_FOR_LAUNCH</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO1">
+<block type="controls_if" id=".BTdYTNTt%gf^t!t8Y0Y">
+<value name="IF0">
+<block type="procedures_callreturn" id="nGl$a|^kwbt(R*:0p_I;">
+<mutation name="launch">
+<arg name="shotRequested"/>
+</mutation>
+<value name="ARG0">
+<block type="logic_boolean" id="a|]i%NAzC3i]4(jl!;JW">
+<field name="BOOL">FALSE</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO0">
+<block type="math_change" id="DBGw~G-znW%)8AFcVXne">
+<field name="VAR" id="OmW!vl;j|Pl_|L50r#$O">shotsToFire</field>
+<value name="DELTA">
+<shadow type="math_number" id="v#{}DT;55s,]gg`87m+M">
+<field name="NUM">1</field>
+</shadow>
+<block type="math_single" id="YBtF()I$vkA3#%ro7Y0E">
+<field name="OP">NEG</field>
+<value name="NUM">
+<shadow type="math_number" id="]3}f_]T3!,g3bi,Y`yty">
+<field name="NUM">9</field>
+</shadow>
+<block type="math_number" id="/S$z06Pq!{uHCfz6cPW^">
+<field name="NUM">1</field>
+</block>
+</value>
+</block>
+</value>
+<next>
+<block type="controls_if" id="/?i|nKl-YXCz7EAz5eW)">
+<mutation else="1"/>
+<value name="IF0">
+<block type="logic_compare" id="Xzkk,4vMP(h|NZHu{=jS">
+<field name="OP">GT</field>
+<value name="A">
+<block type="variables_get" id="vj1OqOB%kW+]wy00^.4f">
+<field name="VAR" id="OmW!vl;j|Pl_|L50r#$O">shotsToFire</field>
+</block>
+</value>
+<value name="B">
+<block type="math_number" id="+pdJufM-GdrCPkz8){,:">
+<field name="NUM">0</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO0">
+<block type="variables_set" id=";Hg3u?g#B3nzA|E$FU/;">
+<field name="VAR" id="~V=ciD%YB#vC_Bs!MzE-">autoStateMachine</field>
+<value name="VALUE">
+<block type="variables_get" id="S#~QiY1^)^~(-5;}1.PU">
+<field name="VAR" id="5(Bd2#|Wx7jvb5JU!.L{">LAUNCH_BALLS</field>
+</block>
+</value>
+</block>
+</statement>
+<statement name="ELSE">
+<block type="dcMotor_setProperty_RunMode" id="O[:v].P~C4eN!qlK1KO,">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">Mode</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_runMode" id="ehY.zYL4EORK=Z,8LuGE">
+<field name="RUN_MODE">STOP_AND_RESET_ENCODER</field>
+</shadow>
+</value>
+<next>
+<block type="dcMotor_setProperty_RunMode" id="0;Sk}*awHQQ;tevQX~)u">
+<field name="IDENTIFIER">right_driveAsDcMotor</field>
+<field name="PROP">Mode</field>
+<data>{"IDENTIFIER":"right_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"right_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"right_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_runMode" id="gX,:QX/owNG@Y:Q_#1]g">
+<field name="RUN_MODE">STOP_AND_RESET_ENCODER</field>
+</shadow>
+</value>
+<next>
+<block type="dcMotor_setProperty_Number" id="^fPdL_h2`kJ^*ALWeCH_">
+<field name="IDENTIFIER">launcherAsDcMotor</field>
+<field name="PROP">Velocity</field>
+<data>{"IDENTIFIER":"launcher","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"launcher\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"launcher\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="math_number" id="TC$TzZmw5NF;-yE{7*BR">
+<field name="NUM">0</field>
+</shadow>
+<block type="math_number" id="%1)pRIwjeUlg#XQG@J`p">
+<field name="NUM">0</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="9@)Xlu!2-Bg)=%{J:1M1">
+<field name="VAR" id="~V=ciD%YB#vC_Bs!MzE-">autoStateMachine</field>
+<value name="VALUE">
+<block type="variables_get" id="uxhW:GrI/WWHxIOj|;tw">
+<field name="VAR" id="eBm$OiK)0yv/c[_GdYJY">DRIVING_AWAY_FROM_GOAL</field>
+</block>
+</value>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</statement>
+</block>
+</next>
+</block>
+</statement>
+</block>
+</statement>
+<value name="IF2">
+<block type="logic_compare" id="3jbf96sqfch1V)0PW=`E">
+<field name="OP">EQ</field>
+<value name="A">
+<block type="variables_get" id="0zr7_vl#HC^%boY{(;j,">
+<field name="VAR" id="~V=ciD%YB#vC_Bs!MzE-">autoStateMachine</field>
+</block>
+</value>
+<value name="B">
+<block type="variables_get" id="#FShlcboI@,/-4YT(WjV">
+<field name="VAR" id="eBm$OiK)0yv/c[_GdYJY">DRIVING_AWAY_FROM_GOAL</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO2">
+<block type="controls_if" id="URfk-SK$qi_OAy;yj0F,">
+<value name="IF0">
+<block type="procedures_callreturn" id="-5=+=9(hoQKnmBVlC}eA">
+<mutation name="drive">
+<arg name="distanceInches"/>
+</mutation>
+<value name="ARG0">
+<block type="math_number" id="k5:|-Oc?,!p,GLzmeFPC">
+<field name="NUM">-4</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO0">
+<block type="dcMotor_setProperty_RunMode" id="TCW(g^w0O$+sypK4pBwZ">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">Mode</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_runMode" id="1do;IjxfYR-{|(+5)0m-">
+<field name="RUN_MODE">STOP_AND_RESET_ENCODER</field>
+</shadow>
+</value>
+<next>
+<block type="dcMotor_setProperty_RunMode" id="OsBQgPZVlPz2N39YESw/">
+<field name="IDENTIFIER">right_driveAsDcMotor</field>
+<field name="PROP">Mode</field>
+<data>{"IDENTIFIER":"right_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"right_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"right_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_runMode" id="/SIJ/y(`}j9AGtqct./]">
+<field name="RUN_MODE">STOP_AND_RESET_ENCODER</field>
+</shadow>
+</value>
+<next>
+<block type="variables_set" id="%0Mg4bNlaAnYiv.6en)j">
+<field name="VAR" id="~V=ciD%YB#vC_Bs!MzE-">autoStateMachine</field>
+<value name="VALUE">
+<block type="variables_get" id="t=2,J|(mUx;VOL%EY,cF">
+<field name="VAR" id="GUU1O#QlF!GxL7S}*61P">ROTATING</field>
+</block>
+</value>
+</block>
+</next>
+</block>
+</next>
+</block>
+</statement>
+</block>
+</statement>
+<value name="IF3">
+<block type="logic_compare" id="qo|a5=x=N-w:tH)hl9Ks">
+<field name="OP">EQ</field>
+<value name="A">
+<block type="variables_get" id="Ac+r~fg6o_V~2MY4!=AX">
+<field name="VAR" id="~V=ciD%YB#vC_Bs!MzE-">autoStateMachine</field>
+</block>
+</value>
+<value name="B">
+<block type="variables_get" id="2xKdbr:1@ZzYl+A1svVb">
+<field name="VAR" id="GUU1O#QlF!GxL7S}*61P">ROTATING</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO3">
+<block type="controls_if" id="^sbyBhnJ|o2@ji#jW9bP">
+<mutation else="1"/>
+<value name="IF0">
+<block type="logic_compare" id="v246wtR;tsRz}koF._:N">
+<field name="OP">EQ</field>
+<value name="A">
+<block type="variables_get" id="f*PvXa:45RcBTNixqRrO">
+<field name="VAR" id="(:4G=0UOS^5hnuwi(rV^">alliance</field>
+</block>
+</value>
+<value name="B">
+<block type="variables_get" id="ja42#6m:#+uU80-UY-xj">
+<field name="VAR" id="aSKlx8xg%G{_}sd3MDn,">RED</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO0">
+<block type="variables_set" id="LPuY~3Ov/7i;RZa=1!/J">
+<field name="VAR" id="M8EMAoji*(C6up%%kuAZ">robotRotateAngle</field>
+<value name="VALUE">
+<block type="math_number" id="?B-6iMYIPiGeVQ~hEL]+">
+<field name="NUM">45</field>
+</block>
+</value>
+</block>
+</statement>
+<statement name="ELSE">
+<block type="variables_set" id="-IJ!dbwY.Ya[@7eeLj(x">
+<field name="VAR" id="M8EMAoji*(C6up%%kuAZ">robotRotateAngle</field>
+<value name="VALUE">
+<block type="math_number" id="!u[d,JSA-eSrnEXTL7x|">
+<field name="NUM">-45</field>
+</block>
+</value>
+</block>
+</statement>
+<next>
+<block type="controls_if" id=")P/k`CHME91MmZY^bL`I">
+<value name="IF0">
+<block type="procedures_callreturn" id="oy`!+tek1cpQOvHLnZpL">
+<mutation name="rotate"/>
+</block>
+</value>
+<statement name="DO0">
+<block type="dcMotor_setProperty_RunMode" id="u.)Q0-E40(KbhR`k{YJG">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">Mode</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_runMode" id="%0mO|XW%mPNaLh;rWx7I">
+<field name="RUN_MODE">STOP_AND_RESET_ENCODER</field>
+</shadow>
+</value>
+<next>
+<block type="dcMotor_setProperty_RunMode" id="[8@d{^`3;q_+#OokPw0,">
+<field name="IDENTIFIER">right_driveAsDcMotor</field>
+<field name="PROP">Mode</field>
+<data>{"IDENTIFIER":"right_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"right_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"right_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_runMode" id="2,*#1~oQsvAGR=HACl|B">
+<field name="RUN_MODE">STOP_AND_RESET_ENCODER</field>
+</shadow>
+</value>
+<next>
+<block type="variables_set" id="]^^8LHOpcIdkLAR=r88x">
+<field name="VAR" id="~V=ciD%YB#vC_Bs!MzE-">autoStateMachine</field>
+<value name="VALUE">
+<block type="variables_get" id="`yhS$1`LdqjeyGnNo1qr">
+<field name="VAR" id="K:4K_zz6c=4T[,y~5+1A">DRIVING_OFF_LINE</field>
+</block>
+</value>
+</block>
+</next>
+</block>
+</next>
+</block>
+</statement>
+</block>
+</next>
+</block>
+</statement>
+<value name="IF4">
+<block type="logic_compare" id="{=_r]SwB)#g6euw`5BYl">
+<field name="OP">EQ</field>
+<value name="A">
+<block type="variables_get" id="c;j#eNqD#*a:)x!8rPA,">
+<field name="VAR" id="~V=ciD%YB#vC_Bs!MzE-">autoStateMachine</field>
+</block>
+</value>
+<value name="B">
+<block type="variables_get" id="QHHygTG#o^h=u9xTt5yr">
+<field name="VAR" id="K:4K_zz6c=4T[,y~5+1A">DRIVING_OFF_LINE</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO4">
+<block type="controls_if" id="1!xJEq:o/s5HZWke(u:4">
+<value name="IF0">
+<block type="procedures_callreturn" id="zXHrdJDv:a2AQinH~=}w">
+<mutation name="drive">
+<arg name="distanceInches"/>
+</mutation>
+<value name="ARG0">
+<block type="math_number" id="mAFw:kxlBDgpx)-gV;-y">
+<field name="NUM">-26</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO0">
+<block type="variables_set" id="rJZYLobXg_s;f9yY+)Qw">
+<field name="VAR" id="~V=ciD%YB#vC_Bs!MzE-">autoStateMachine</field>
+<value name="VALUE">
+<block type="variables_get" id="mn[SlCVvy~whWysmSuqJ">
+<field name="VAR" id="[4YasN_zUNQBy^4,;VB-">COMPLETE</field>
+</block>
+</value>
+</block>
+</statement>
+</block>
+</statement>
+<next>
+<block type="telemetry_addTextData_All" id=",keoQOJ2^*^wkGO}%x1E">
+<value name="KEY">
+<shadow type="text" id="A],n(QdqeJoBevLsEU7H">
+<field name="TEXT">Auto State</field>
+</shadow>
+</value>
+<value name="TEXT">
+<shadow type="text" id=";g/0:mtXNXjXD@%UEqjL">
+<field name="TEXT">text</field>
+</shadow>
+<block type="variables_get" id="9;[_4IZAO}!u^,[6kkjO">
+<field name="VAR" id="~V=ciD%YB#vC_Bs!MzE-">autoStateMachine</field>
+</block>
+</value>
+<next>
+<block type="telemetry_addTextData_All" id="Zi.EJG_H),:G*[.u6fa9">
+<value name="KEY">
+<shadow type="text" id="j}!W7@wuDvsFr`:}aAd;">
+<field name="TEXT">Launcher State</field>
+</shadow>
+</value>
+<value name="TEXT">
+<shadow type="text" id="WPtfQT?xO*sVSir7a^/_">
+<field name="TEXT">text</field>
+</shadow>
+<block type="variables_get" id="icfGC~Jw$YsZwZ;CH9Zi">
+<field name="VAR" id="V~:KEZ9[=:IRl|jEaZ_*">launchState</field>
+</block>
+</value>
+<next>
+<block type="telemetry_addTextData_All" id="=0k3bQ/CWa?^$g5DfVNE">
+<value name="KEY">
+<shadow type="text" id="m7CoOEA{zZdoEL={02i3">
+<field name="TEXT">Motor Current Positions</field>
+</shadow>
+</value>
+<value name="TEXT">
+<shadow type="text" id="SFM1PfByd*J^GMp6DA5Y">
+<field name="TEXT">text</field>
+</shadow>
+<block type="text_join" id="I93u1.CN53m@s(ss#Yyn">
+<mutation items="4"/>
+<value name="ADD0">
+<block type="text" id="~7=#vnYxq.{#Qti=M@w+">
+<field name="TEXT">Left: </field>
+</block>
+</value>
+<value name="ADD1">
+<block type="dcMotor_getProperty_Number" id="FjcrW]9A=#r8qjw~hNZV">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">CurrentPosition</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+</block>
+</value>
+<value name="ADD2">
+<block type="text" id="^RKp4GQK(;V:c{*wqmc8">
+<field name="TEXT"> Right: </field>
+</block>
+</value>
+<value name="ADD3">
+<block type="dcMotor_getProperty_Number" id="PnuKHa]qQ6O-HI@Aq_zL">
+<field name="IDENTIFIER">right_driveAsDcMotor</field>
+<field name="PROP">CurrentPosition</field>
+<data>{"IDENTIFIER":"right_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"right_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"right_drive\",\nor select a device that is in the current robot configuration."}</data>
+</block>
+</value>
+</block>
+</value>
+<next>
+<block type="telemetry_addTextData_All" id="h#x9c]fcc`cYtEyy,Oyh">
+<value name="KEY">
+<shadow type="text" id="5*5?2pkKE*9(@jOR`c?l">
+<field name="TEXT">Motor Target Positions</field>
+</shadow>
+</value>
+<value name="TEXT">
+<shadow type="text">
+<field name="TEXT">text</field>
+</shadow>
+<block type="text_join" id="9LXcOzJd4=|HK7j:Z6:U">
+<mutation items="4"/>
+<value name="ADD0">
+<block type="text" id="l1G#%_ndQry[##;6##iy">
+<field name="TEXT">Left: </field>
+</block>
+</value>
+<value name="ADD1">
+<block type="dcMotor_getProperty_Number" id="}Skh`7k.Q[h_=E@?~[[.">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">TargetPosition</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+</block>
+</value>
+<value name="ADD2">
+<block type="text" id="M`AU7Pj_1L1a=G*kW;?l">
+<field name="TEXT"> Right: </field>
+</block>
+</value>
+<value name="ADD3">
+<block type="dcMotor_getProperty_Number" id="ofeVDSy#(M]$ZYGaq.]I">
+<field name="IDENTIFIER">right_driveAsDcMotor</field>
+<field name="PROP">TargetPosition</field>
+<data>{"IDENTIFIER":"right_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"right_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"right_drive\",\nor select a device that is in the current robot configuration."}</data>
+</block>
+</value>
+</block>
+</value>
+<next>
+<block type="telemetry_update" id="ZL3ZEF;KUD0lg/,Ej(oZ"/>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</statement>
+</block>
+</statement>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</statement>
+</block>
+<block type="procedures_defnoreturn" id="~k_E0m3R!AnV.$tEi=xa" x="512" y="-520">
+<field name="NAME">initMotors</field>
+<comment pinned="false" h="80" w="160">Describe this function...</comment>
+<statement name="STACK">
+<block type="dcMotor_setProperty_Direction" id="E*!V0UV_JOV34n?8$!6~">
+<field name="IDENTIFIER">launcherAsDcMotor</field>
+<field name="PROP">Direction</field>
+<data>{"IDENTIFIER":"launcher","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"launcher\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"launcher\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_direction" id="M)x#+3@4T;:6[=$h~O?L">
+<field name="DIRECTION">FORWARD</field>
+</shadow>
+</value>
+<next>
+<block type="dcMotor_setProperty_Direction" id="A9vKK!kYwIraKf2^[2TV">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">Direction</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_direction" id="A-q:XnHSP;{3SWr8!kg#">
+<field name="DIRECTION">REVERSE</field>
+</shadow>
+</value>
+<next>
+<block type="dcMotor_setProperty_RunMode" id="80LpU!P7VabG6(t;lpM5">
+<field name="IDENTIFIER">launcherAsDcMotor</field>
+<field name="PROP">Mode</field>
+<data>{"IDENTIFIER":"launcher","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"launcher\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"launcher\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_runMode" id="l2}DEm#0%]0@X{ic/*_z">
+<field name="RUN_MODE">RUN_USING_ENCODER</field>
+</shadow>
+</value>
+<next>
+<block type="dcMotor_setProperty_ZeroPowerBehavior" id="pfqhpG/]Pgo-xme1W?PQ">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">ZeroPowerBehavior</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_zeroPowerBehavior" id="v,bNK-Ds;VL9#ehri8Qr">
+<field name="ZERO_POWER_BEHAVIOR">BRAKE</field>
+</shadow>
+</value>
+<next>
+<block type="dcMotor_setProperty_ZeroPowerBehavior" id="T}-c]Q8yzE5ETKOd9+f?">
+<field name="IDENTIFIER">right_driveAsDcMotor</field>
+<field name="PROP">ZeroPowerBehavior</field>
+<data>{"IDENTIFIER":"right_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"right_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"right_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_zeroPowerBehavior" id="}kluEQb-n}TV(|xO^-A6">
+<field name="ZERO_POWER_BEHAVIOR">BRAKE</field>
+</shadow>
+</value>
+<next>
+<block type="dcMotor_setProperty_ZeroPowerBehavior" id="q)ze){hgUH.QN[v8MLn1">
+<field name="IDENTIFIER">launcherAsDcMotor</field>
+<field name="PROP">ZeroPowerBehavior</field>
+<data>{"IDENTIFIER":"launcher","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"launcher\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"launcher\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_zeroPowerBehavior" id="_e*Yg]ah2YB?C`xHB.!o">
+<field name="ZERO_POWER_BEHAVIOR">BRAKE</field>
+</shadow>
+</value>
+<next>
+<block type="crServo_setProperty_Direction" id="Vj;G#0o|;_T?M`7^WG5s">
+<field name="IDENTIFIER">left_feederAsCRServo</field>
+<field name="PROP">Direction</field>
+<data>{"IDENTIFIER":"left_feeder"}</data>
+<value name="VALUE">
+<shadow type="crServo_typedEnum_direction" id="Pna{P/o@AxElkd@c`$y;">
+<field name="DIRECTION">REVERSE</field>
+</shadow>
+</value>
+<next>
+<block type="crServo_setProperty_Number" id="@`C/0Eu~@9G1i!=7H8(Y">
+<field name="IDENTIFIER">left_feederAsCRServo</field>
+<field name="PROP">Power</field>
+<data>{"IDENTIFIER":"left_feeder"}</data>
+<value name="VALUE">
+<shadow type="math_number" id="lls.OkZ1w*I)b[TP-x!1">
+<field name="NUM">0</field>
+</shadow>
+</value>
+<next>
+<block type="crServo_setProperty_Number" id="rdM8K^ANZPa^yr~Yb8qh">
+<field name="IDENTIFIER">right_feederAsCRServo</field>
+<field name="PROP">Power</field>
+<data>{"IDENTIFIER":"right_feeder"}</data>
+<value name="VALUE">
+<shadow type="math_number" id="gOeI)AbLA45*jYW;`by~">
+<field name="NUM">0</field>
+</shadow>
+</value>
+<next>
+<block type="dcMotor_setVelocityPIDFCoefficients" id="9cGd_R?:[W$velX8{c`H">
+<field name="IDENTIFIER">launcherAsDcMotor</field>
+<data>{"IDENTIFIER":"launcher","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"launcher\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"launcher\",\nor select a device that is in the current robot configuration."}</data>
+<value name="P">
+<shadow type="math_number" id=".9EoN%-x?mW,:YV4kOK}">
+<field name="NUM">300</field>
+</shadow>
+</value>
+<value name="I">
+<shadow type="math_number" id="b9%ZWGmCubE=?Cb*(,jv">
+<field name="NUM">0</field>
+</shadow>
+</value>
+<value name="D">
+<shadow type="math_number" id="6#Ky5O`h4Z7oSvqr5CJ%">
+<field name="NUM">0</field>
+</shadow>
+</value>
+<value name="F">
+<shadow type="math_number" id="$jlZZX}f2P=b,.c[qk5c">
+<field name="NUM">10</field>
+</shadow>
+</value>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</statement>
+</block>
+<block type="procedures_defnoreturn" id="NT[1(K*-fWx!j*+AD!hN" x="1192" y="-520">
+<field name="NAME">createAutoStateMachine</field>
+<comment pinned="false" h="80" w="160">Describe this function...</comment>
+<statement name="STACK">
+<block type="variables_set" id="G6E?aBY,l}a%/LPGU!BF">
+<field name="VAR" id="5(Bd2#|Wx7jvb5JU!.L{">LAUNCH_BALLS</field>
+<value name="VALUE">
+<block type="text" id="^Ve#c4ui-Ki3J%wWE.t9">
+<field name="TEXT">LAUNCH_BALLS</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="B94$b;yH*-_AIZhxXzIc">
+<field name="VAR" id="!%c1bf0x,y8|CNPu:oCa">WAIT_FOR_LAUNCH</field>
+<value name="VALUE">
+<block type="text" id="hi?vogTmRQyt!PcggST[">
+<field name="TEXT">WAIT_FOR_LAUNCH</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="S}:4Cy%t@7)=pcXSdaY-">
+<field name="VAR" id="eBm$OiK)0yv/c[_GdYJY">DRIVING_AWAY_FROM_GOAL</field>
+<value name="VALUE">
+<block type="text" id="xCiV1csXC[dvCwRohsc$">
+<field name="TEXT">DRIVING_AWAY_FROM_GOAL</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="*Sh;/~UBx+X?x+8;dNuQ">
+<field name="VAR" id="GUU1O#QlF!GxL7S}*61P">ROTATING</field>
+<value name="VALUE">
+<block type="text" id="o,5,/P/y4`b``[c*F?oJ">
+<field name="TEXT">ROTATING</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="#3Spd[9wy+B{vn(:4o5)">
+<field name="VAR" id="K:4K_zz6c=4T[,y~5+1A">DRIVING_OFF_LINE</field>
+<value name="VALUE">
+<block type="text" id="ePheG%(G_~}Aa0yv#mI_">
+<field name="TEXT">DRIVING_OFF_LINE</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="nl|pD,5,U=47tZsDp$m+">
+<field name="VAR" id="[4YasN_zUNQBy^4,;VB-">COMPLETE</field>
+<value name="VALUE">
+<block type="text" id="%Oc#PHa9G},1q|PcMXrg">
+<field name="TEXT">COMPLETE</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="-fir1~K$$Wcv,?xa%5UY">
+<field name="VAR" id="~V=ciD%YB#vC_Bs!MzE-">autoStateMachine</field>
+<value name="VALUE">
+<block type="variables_get" id="!kl#6QMC3QQQsZk7Wr$9">
+<field name="VAR" id="5(Bd2#|Wx7jvb5JU!.L{">LAUNCH_BALLS</field>
+</block>
+</value>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</statement>
+</block>
+<block type="procedures_defnoreturn" id="Qv4AI`S@H(ww;f~8vTs_" x="1199" y="-280">
+<field name="NAME">createLaunchStateMachine</field>
+<comment pinned="false" h="80" w="160">Describe this function...</comment>
+<statement name="STACK">
+<block type="variables_set" id="cees|i78s=FCXxM4v72K">
+<field name="VAR" id="nMgyqqS4Uixlpht[g:R-">IDLE</field>
+<value name="VALUE">
+<block type="text" id="kvT1uEAp44F9-7*4yy,0">
+<field name="TEXT">IDLE</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="b9#.g_(n8lQ%5SZk}*Ba">
+<field name="VAR" id="w,7_*qy5Glk{UW}D)]gB">SPIN_UP</field>
+<value name="VALUE">
+<block type="text" id="K_efyAy(Hx*%)*UL91`z">
+<field name="TEXT">SPIN_UP</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="_YB+t8z^PON~yfZ|`5L:">
+<field name="VAR" id="~B4:?8{?ZlR1#rE3bI*R">LAUNCH</field>
+<value name="VALUE">
+<block type="text" id="AYoPvhH-5^m*fz%nVNvA">
+<field name="TEXT">LAUNCH</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="ikkZzA%fLp^,`p$OT;Zb">
+<field name="VAR" id="MC+sAeG6|iz39~I2%:VB">LAUNCHING</field>
+<value name="VALUE">
+<block type="text" id="(-ineFXrM+AUVacDAhWf">
+<field name="TEXT">LAUNCHING</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="lDsO8a.gXwqB)wspvey0">
+<field name="VAR" id="V~:KEZ9[=:IRl|jEaZ_*">launchState</field>
+<value name="VALUE">
+<block type="variables_get" id="i4Wj7Zll,!;d42yXN$)%">
+<field name="VAR" id="nMgyqqS4Uixlpht[g:R-">IDLE</field>
+</block>
+</value>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</statement>
+</block>
+<block type="procedures_defreturn" id="0KM0Nv*[vi*SqxOl=iA;" x="504" y="-98">
+<mutation>
+<arg name="shotRequested" varid="R1p8ZGSf(!fY*rRg44Ho"/>
+</mutation>
+<field name="NAME">launch</field>
+<comment pinned="false" h="80" w="160">Describe this function...</comment>
+<statement name="STACK">
+<block type="controls_if" id="qGS%Q*K!B9AIv![G|nB8">
+<mutation elseif="3"/>
+<value name="IF0">
+<block type="logic_compare" id="o;TN;:t@@35_.zc`([$H">
+<field name="OP">EQ</field>
+<value name="A">
+<block type="variables_get" id="~o8#TU29[%UcpjY~?9J@">
+<field name="VAR" id="V~:KEZ9[=:IRl|jEaZ_*">launchState</field>
+</block>
+</value>
+<value name="B">
+<block type="variables_get" id="KKhs7!t5o-aarR.B2#BU">
+<field name="VAR" id="nMgyqqS4Uixlpht[g:R-">IDLE</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO0">
+<block type="controls_if" id="JNvrG.iF3=46-d3];4-G">
+<value name="IF0">
+<block type="logic_compare" id="mV5iUadxb;_gG,#:.?S*">
+<field name="OP">EQ</field>
+<value name="A">
+<block type="variables_get" id="Cr^xzcmm%o+,h1o(VEF3">
+<field name="VAR" id="R1p8ZGSf(!fY*rRg44Ho">shotRequested</field>
+</block>
+</value>
+<value name="B">
+<block type="logic_boolean" id="rY%$v0`{s,:1,G(2`3|D">
+<field name="BOOL">TRUE</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO0">
+<block type="variables_set" id="MGGpX7}/wv~(H:U.467|">
+<field name="VAR" id="V~:KEZ9[=:IRl|jEaZ_*">launchState</field>
+<value name="VALUE">
+<block type="variables_get" id="1={EBN5Y#J/qOo}q=5/X">
+<field name="VAR" id="w,7_*qy5Glk{UW}D)]gB">SPIN_UP</field>
+</block>
+</value>
+<next>
+<block type="elapsedTime2_reset" id="i_;zxAEw!O8uY2yQ~Nn3">
+<value name="ELAPSED_TIME">
+<block type="variables_get" id="63/aFIPZc-zD2@$g*d,U">
+<field name="VAR" id=")x2nrJ|T7ynBlN]w9E}k">shotTimer</field>
+</block>
+</value>
+</block>
+</next>
+</block>
+</statement>
+</block>
+</statement>
+<value name="IF1">
+<block type="logic_compare" id="~n8D29d^2)ilB4ds7^zp">
+<field name="OP">EQ</field>
+<value name="A">
+<block type="variables_get" id="=kj}1.QAB^K5n8):j,w$">
+<field name="VAR" id="V~:KEZ9[=:IRl|jEaZ_*">launchState</field>
+</block>
+</value>
+<value name="B">
+<block type="variables_get" id="E7J^/_yzE=7UM{Y,e`Pu">
+<field name="VAR" id="w,7_*qy5Glk{UW}D)]gB">SPIN_UP</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO1">
+<block type="dcMotor_setProperty_Number" id="SO=wt1Dw65:Zpc)LxzT~">
+<field name="IDENTIFIER">launcherAsDcMotor</field>
+<field name="PROP">Velocity</field>
+<data>{"IDENTIFIER":"launcher","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"launcher\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"launcher\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="math_number">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="H]TlG7Sk7^gB-f:r[r^9">
+<field name="VAR" id="]S)PL/wEu]1;!|GnHG[J">LAUNCHER_TARGET_VELOCITY</field>
+</block>
+</value>
+<next>
+<block type="controls_if" id="Cd`G=@6$c8wra+I7:/6-">
+<value name="IF0">
+<block type="logic_compare" id="^2qR;zkbF%Z5tA(KPF_Z">
+<field name="OP">GT</field>
+<value name="A">
+<block type="dcMotor_getProperty_Number" id="GU1uR^6,CHWe4G:[*_op">
+<field name="IDENTIFIER">launcherAsDcMotor</field>
+<field name="PROP">Velocity</field>
+<data>{"IDENTIFIER":"launcher","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"launcher\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"launcher\",\nor select a device that is in the current robot configuration."}</data>
+</block>
+</value>
+<value name="B">
+<block type="variables_get" id="Y54*hNvfv7UU,?BM,r~s">
+<field name="VAR" id=":Cc`(*(:-B;b)+pUI4T$">LAUNCHER_MIN_VELOCITY</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO0">
+<block type="variables_set" id="ro]7nt#KprrbCH*1-@ci">
+<field name="VAR" id="V~:KEZ9[=:IRl|jEaZ_*">launchState</field>
+<value name="VALUE">
+<block type="variables_get" id="9@C!mfnar^RX?{O6(s18">
+<field name="VAR" id="~B4:?8{?ZlR1#rE3bI*R">LAUNCH</field>
+</block>
+</value>
+</block>
+</statement>
+</block>
+</next>
+</block>
+</statement>
+<value name="IF2">
+<block type="logic_compare" id="ka!r@ib}`_5s-MG(F0@@">
+<field name="OP">EQ</field>
+<value name="A">
+<block type="variables_get" id="N884.))[P]Smc4m0qM]j">
+<field name="VAR" id="V~:KEZ9[=:IRl|jEaZ_*">launchState</field>
+</block>
+</value>
+<value name="B">
+<block type="variables_get" id="%MUuj8Ft+:oBk3ADlj6/">
+<field name="VAR" id="~B4:?8{?ZlR1#rE3bI*R">LAUNCH</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO2">
+<block type="crServo_setProperty_Number" id="37JCC9b#W:ZuiE4ADli#">
+<field name="IDENTIFIER">left_feederAsCRServo</field>
+<field name="PROP">Power</field>
+<data>{"IDENTIFIER":"left_feeder"}</data>
+<value name="VALUE">
+<shadow type="math_number" id="Fg|-q}sP$bSfEH^ckY/`">
+<field name="NUM">1</field>
+</shadow>
+</value>
+<next>
+<block type="crServo_setProperty_Number" id="hQS1@5E:i#VHc:NzqTX=">
+<field name="IDENTIFIER">right_feederAsCRServo</field>
+<field name="PROP">Power</field>
+<data>{"IDENTIFIER":"right_feeder"}</data>
+<value name="VALUE">
+<shadow type="math_number" id=".pO?a|Uu^-8bDpne=nI,">
+<field name="NUM">1</field>
+</shadow>
+</value>
+<next>
+<block type="elapsedTime2_reset" id="nEy~{P^.XDg,`ZrZ+Cg^">
+<value name="ELAPSED_TIME">
+<block type="variables_get" id="N}~fSQy]3}Z`w]|~Xf$?">
+<field name="VAR" id="03f4X?|!?FWF8$:THT1_">feederTimer</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="ECh/G|MfbTyxva[]~FS2">
+<field name="VAR" id="V~:KEZ9[=:IRl|jEaZ_*">launchState</field>
+<value name="VALUE">
+<block type="variables_get" id="j$MC5pO(VxI6/+uHg$wO">
+<field name="VAR" id="MC+sAeG6|iz39~I2%:VB">LAUNCHING</field>
+</block>
+</value>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</statement>
+<value name="IF3">
+<block type="logic_compare" id="e0b+zEl*:U.e/oi(``!]">
+<field name="OP">EQ</field>
+<value name="A">
+<block type="variables_get" id="oW`@z)@Ja.hRN!UH8(=N">
+<field name="VAR" id="V~:KEZ9[=:IRl|jEaZ_*">launchState</field>
+</block>
+</value>
+<value name="B">
+<block type="variables_get" id="/g7CPMgE2;[cU520WeHa">
+<field name="VAR" id="MC+sAeG6|iz39~I2%:VB">LAUNCHING</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO3">
+<block type="controls_if" id="L3,x/e)YQ~F?/45sX5lU">
+<value name="IF0">
+<block type="logic_compare" id="P]$h:*_Y+CoRZp-@[Wjr">
+<field name="OP">GT</field>
+<value name="A">
+<block type="elapsedTime2_getProperty_Number" id="jw_YykcmfXtj859M8[ts">
+<field name="PROP">Seconds</field>
+<value name="ELAPSED_TIME">
+<block type="variables_get" id="O:3P^Ldgg5cR4nel~Yv~">
+<field name="VAR" id="03f4X?|!?FWF8$:THT1_">feederTimer</field>
+</block>
+</value>
+</block>
+</value>
+<value name="B">
+<block type="math_number" id="yRz=8BT3O^dXBNbuOZRw">
+<field name="NUM">0.2</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO0">
+<block type="crServo_setProperty_Number" id="1s_wH.D#cwj{ZlKArQJA">
+<field name="IDENTIFIER">left_feederAsCRServo</field>
+<field name="PROP">Power</field>
+<data>{"IDENTIFIER":"left_feeder"}</data>
+<value name="VALUE">
+<shadow type="math_number" id="wUyi{elo5*R.|VN0u?tM">
+<field name="NUM">0</field>
+</shadow>
+</value>
+<next>
+<block type="crServo_setProperty_Number" id="fqS2i;NJMbZ/JYUmPQz0">
+<field name="IDENTIFIER">right_feederAsCRServo</field>
+<field name="PROP">Power</field>
+<data>{"IDENTIFIER":"right_feeder"}</data>
+<value name="VALUE">
+<shadow type="math_number" id="S^I9p7qwgQJ}CJwjfdM+">
+<field name="NUM">0</field>
+</shadow>
+</value>
+<next>
+<block type="controls_if" id="6T-I!LG$v0v:L{3(MW7-">
+<value name="IF0">
+<block type="logic_compare" id="]}htoh(}y%{.OJ+*//.H">
+<field name="OP">GT</field>
+<value name="A">
+<block type="elapsedTime2_getProperty_Number" id="cA%ik=!c8{L#]N4;jX@x">
+<field name="PROP">Seconds</field>
+<value name="ELAPSED_TIME">
+<block type="variables_get" id="jQBT^lGzf6R.pQrWu6$[">
+<field name="VAR" id=")x2nrJ|T7ynBlN]w9E}k">shotTimer</field>
+</block>
+</value>
+</block>
+</value>
+<value name="B">
+<block type="variables_get" id="a|`YLRKXvgA!#jI5/k)S">
+<field name="VAR" id="C;!+]Z^;m{H6]I:%a9^6">TIME_BETWEEN_SHOTS</field>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO0">
+<block type="variables_set" id="t.NGoHHvIuSw^]mXA2R5">
+<field name="VAR" id="V~:KEZ9[=:IRl|jEaZ_*">launchState</field>
+<value name="VALUE">
+<block type="variables_get" id="8).X@/SHrog)oNN5IYVp">
+<field name="VAR" id="nMgyqqS4Uixlpht[g:R-">IDLE</field>
+</block>
+</value>
+<next>
+<block type="procedures_ifreturn" id=":^V/hs/jwv#(rW[{r:#l">
+<mutation value="1"/>
+<value name="CONDITION">
+<block type="logic_boolean" id="-9b5x()6RqF[aRu-.xiQ">
+<field name="BOOL">TRUE</field>
+</block>
+</value>
+<value name="VALUE">
+<block type="logic_boolean" id="|Pl{);oO0e(=J(*)3@:g">
+<field name="BOOL">TRUE</field>
+</block>
+</value>
+</block>
+</next>
+</block>
+</statement>
+</block>
+</next>
+</block>
+</next>
+</block>
+</statement>
+</block>
+</statement>
+</block>
+</statement>
+<value name="RETURN">
+<block type="logic_boolean" id="%#@T-BmPPn0,s;s~SNZa">
+<field name="BOOL">FALSE</field>
+</block>
+</value>
+</block>
+<block type="procedures_defnoreturn" id="w8g4_MJH`.l~W59iW:d/" x="1201" y="-88">
+<field name="NAME">createVariables</field>
+<comment pinned="false" h="80" w="160">Describe this function...</comment>
+<statement name="STACK">
+<block type="variables_set" id="_i`KM?;AS?Xgn[?4=~I9">
+<field name="VAR" id="]S)PL/wEu]1;!|GnHG[J">LAUNCHER_TARGET_VELOCITY</field>
+<value name="VALUE">
+<block type="math_number" id="1rsh(|)V1V-S~8|99OA=">
+<field name="NUM">1125</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="Cx^!9|,(Hg6scG:r?PBP">
+<field name="VAR" id=":Cc`(*(:-B;b)+pUI4T$">LAUNCHER_MIN_VELOCITY</field>
+<value name="VALUE">
+<block type="math_number" id="_OshSZ`IK01K_.eJbR}a">
+<field name="NUM">1075</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="O#BM]$)P={^-mA@:atD*">
+<field name="VAR" id="C;!+]Z^;m{H6]I:%a9^6">TIME_BETWEEN_SHOTS</field>
+<value name="VALUE">
+<block type="math_number" id="@#c~Z{plI@1qZfo{.I`}">
+<field name="NUM">2</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="b50S90~WV7pd-W5F#e5;">
+<field name="VAR" id=";hB6x{lEE9~%ZK,$iK:7">DRIVE_SPEED</field>
+<value name="VALUE">
+<block type="math_number" id="A[rwb2%aV:}p:`WSqK/-">
+<field name="NUM">0.5</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id=";BvOOYcubO!,GALbMIC}">
+<field name="VAR" id="qK`G6fdDE%x_#YrQ3Cf~">ROTATE_SPEED</field>
+<value name="VALUE">
+<block type="math_number" id="o_`+rwy!;df_M5:e+3lt">
+<field name="NUM">0.2</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="0hvrrykL-q!QUlc`_f?(">
+<field name="VAR" id="`/c0*hW+ZKXfBMbeLVI{">WHEEL_DIAMETER_MM</field>
+<value name="VALUE">
+<block type="math_number" id="f@@~qq^m^OU?U%c8:qP6">
+<field name="NUM">96</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="MKFBTY}ljo+bA:H$86_s">
+<field name="VAR" id="]F`]vpA4r=JQ1IN3)*^3">ENCODER_TICKS_PER_REV</field>
+<value name="VALUE">
+<block type="math_number" id="7c#J}aRHk573vd2tB$ka">
+<field name="NUM">537.7</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="V%WkMiDh!hl[@KpZ43L`">
+<field name="VAR" id="7P)rj);{=IWl{d,Yjg?}">TICKS_PER_INCH</field>
+<value name="VALUE">
+<block type="math_arithmetic" id="}:;|i}T0(r-0Coo6r^1m">
+<field name="OP">DIVIDE</field>
+<value name="A">
+<shadow type="math_number" id="2a^yNI}Io7W*Z(=blb,4">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="LQ!W{#r1vlbJ$X=Mw/4?">
+<field name="VAR" id="]F`]vpA4r=JQ1IN3)*^3">ENCODER_TICKS_PER_REV</field>
+</block>
+</value>
+<value name="B">
+<shadow type="math_number" id="jkdI9qY^N2J$VE235L[i">
+<field name="NUM">1</field>
+</shadow>
+<block type="math_arithmetic" id="EBQ#;jYTv!1j8V_}s:9*">
+<field name="OP">DIVIDE</field>
+<value name="A">
+<shadow type="math_number" id="gc5Gs5:Ss.yDCKBJ?ys0">
+<field name="NUM">1</field>
+</shadow>
+<block type="math_arithmetic" id="J96{rK;Lwk^!4I!Dq,s4">
+<field name="OP">MULTIPLY</field>
+<value name="A">
+<shadow type="math_number" id="/)Cq|-3i}h9_$PUao?%i">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="!YLgYA|a@ah~STGru|z?">
+<field name="VAR" id="`/c0*hW+ZKXfBMbeLVI{">WHEEL_DIAMETER_MM</field>
+</block>
+</value>
+<value name="B">
+<shadow type="math_number" id=":Byye8CJoi9hpDgJq3H~">
+<field name="NUM">1</field>
+</shadow>
+<block type="math_constant" id="hk1GcR_az69Y];oR:azQ">
+<field name="CONSTANT">PI</field>
+</block>
+</value>
+</block>
+</value>
+<value name="B">
+<shadow type="math_number" id="ls?ODp81Ibt,aoa,H[hM">
+<field name="NUM">1</field>
+</shadow>
+<block type="math_number" id="lKKbvmO)mJ)O@M*bt}:^">
+<field name="NUM">25.4</field>
+</block>
+</value>
+</block>
+</value>
+</block>
+</value>
+<next>
+<block type="variables_set" id="q:,oA/$:7=(K(pvH};#R">
+<field name="VAR" id=".1jHP[]ZEXIL8D7ilE7v">TRACK_WIDTH_INCHES</field>
+<value name="VALUE">
+<block type="math_number" id="x}w{kRI#Y#K7^h(p#7Q?">
+<field name="NUM">15.9</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="2E?%PnUJ3^F]]g`BbU{]">
+<field name="VAR" id="OmW!vl;j|Pl_|L50r#$O">shotsToFire</field>
+<value name="VALUE">
+<block type="math_number" id="$FzHkqD7XAVI4]!T#xpn">
+<field name="NUM">3</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="%AUFLbQ@^DDQ(tYt32lK">
+<field name="VAR" id="M8EMAoji*(C6up%%kuAZ">robotRotateAngle</field>
+<value name="VALUE">
+<block type="math_number" id="o)8LA?g_u%y9t2d8cY~w">
+<field name="NUM">45</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="nSn4A5s_*0grwUhEvqz3">
+<field name="VAR" id="lQaI@JFXkw95i+{(fo^`">DRIVE_TOLERANCE</field>
+<value name="VALUE">
+<block type="math_number" id="1+NHBu7*mAG[sQXY.]yR">
+<field name="NUM">0.5</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="$4Fa7l+X9YvUL}y[Op*x">
+<field name="VAR" id="v)^?2P!;29$x)=@0hrAW">holdSeconds</field>
+<value name="VALUE">
+<block type="math_number" id="ED+ZlW`a0D_/Jb=UZP,3">
+<field name="NUM">1</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="=E|y_q`4o{lB#)(9L{A5">
+<field name="VAR" id=")x2nrJ|T7ynBlN]w9E}k">shotTimer</field>
+<value name="VALUE">
+<block type="elapsedTime2_create" id="9VA(@`FR9gi!]%t=9Nlv"/>
+</value>
+<next>
+<block type="variables_set" id="4^xoBEzFI}_qf(3Jo+~[">
+<field name="VAR" id="03f4X?|!?FWF8$:THT1_">feederTimer</field>
+<value name="VALUE">
+<block type="elapsedTime2_create" id="jP;6%6Bvix_9gW/(i#@G"/>
+</value>
+<next>
+<block type="variables_set" id="2`c!xy=fS76z8HA].a%]">
+<field name="VAR" id="iyi=$,jIh{9jRd7_fP:W">driveTimer</field>
+<value name="VALUE">
+<block type="elapsedTime2_create" id=")b$bz;:$tC6Tb7^]:nrS"/>
+</value>
+<next>
+<block type="variables_set" id="3jwqdMHYTd63$I(t#Ey;">
+<field name="VAR" id="aSKlx8xg%G{_}sd3MDn,">RED</field>
+<value name="VALUE">
+<block type="text" id="E^TCy3]OqywRjH]7$Mq{">
+<field name="TEXT">RED</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="S^J-=Gr0gFI5r/ZR7-^`">
+<field name="VAR" id="c$Fo2f2:EUA/ozJYrOTl">BLUE</field>
+<value name="VALUE">
+<block type="text" id="3x5VipMddH)io+oVReLS">
+<field name="TEXT">BLUE</field>
+</block>
+</value>
+<next>
+<block type="variables_set" id="1mFygmn_z.;fM1FT8ue}">
+<field name="VAR" id="(:4G=0UOS^5hnuwi(rV^">alliance</field>
+<value name="VALUE">
+<block type="variables_get" id="MFG7C2DJFsF#jqnx65DV">
+<field name="VAR" id="aSKlx8xg%G{_}sd3MDn,">RED</field>
+</block>
+</value>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</statement>
+</block>
+<block type="procedures_defreturn" id="~qbV4p$b}=H3Jd@K`:;M" x="508" y="795">
+<mutation>
+<arg name="distanceInches" varid="q[8.]kpElm61_KaFpm`~"/>
+</mutation>
+<field name="NAME">drive</field>
+<comment pinned="false" h="80" w="160">Describe this function...</comment>
+<statement name="STACK">
+<block type="dcMotor_setProperty_Number" id="r^{FKa06+)!F7%e5ahJv">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">TargetPosition</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="math_number" id="yLJ/7-{@~91p(W4;Me~:">
+<field name="NUM">0</field>
+</shadow>
+<block type="math_arithmetic" id="5NnOxJDywhfGsg^8?c{H">
+<field name="OP">MULTIPLY</field>
+<value name="A">
+<shadow type="math_number" id="gVmc9|Ue}VMbobM].uMd">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="uX:4p/axbE4=IE1U1N7~">
+<field name="VAR" id="q[8.]kpElm61_KaFpm`~">distanceInches</field>
+</block>
+</value>
+<value name="B">
+<shadow type="math_number" id="r3s+MEG$X7,J$(qI0%^*">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="#Iysf})fe|=QmRoXB!u]">
+<field name="VAR" id="7P)rj);{=IWl{d,Yjg?}">TICKS_PER_INCH</field>
+</block>
+</value>
+</block>
+</value>
+<next>
+<block type="dcMotor_setProperty_Number" id="wpr+Sf.r$H@Y9#?.%V%Y">
+<field name="IDENTIFIER">right_driveAsDcMotor</field>
+<field name="PROP">TargetPosition</field>
+<data>{"IDENTIFIER":"right_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"right_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"right_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="math_number" id="!A@I)q9~$~/W7yMIi8mW">
+<field name="NUM">0</field>
+</shadow>
+<block type="math_arithmetic" id="=MaWx2h-lwRk7Qfk;_}u">
+<field name="OP">MULTIPLY</field>
+<value name="A">
+<shadow type="math_number">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="/wzQeA)=c7h0/bz=yh[B">
+<field name="VAR" id="q[8.]kpElm61_KaFpm`~">distanceInches</field>
+</block>
+</value>
+<value name="B">
+<shadow type="math_number">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="y19n8$`;%PNM8`75r82b">
+<field name="VAR" id="7P)rj);{=IWl{d,Yjg?}">TICKS_PER_INCH</field>
+</block>
+</value>
+</block>
+</value>
+<next>
+<block type="dcMotor_setProperty_RunMode" id="t3}4`0`w6PGE#j2#l^Vq">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">Mode</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_runMode" id="[mVfWRtBntI4z;TP4FpL">
+<field name="RUN_MODE">RUN_TO_POSITION</field>
+</shadow>
+</value>
+<next>
+<block type="dcMotor_setProperty_RunMode" id=";9:Jz8G5{ya)0fsoL#(B">
+<field name="IDENTIFIER">right_driveAsDcMotor</field>
+<field name="PROP">Mode</field>
+<data>{"IDENTIFIER":"right_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"right_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"right_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_runMode" id=")7T298:5NW4GSax[_WX%">
+<field name="RUN_MODE">RUN_TO_POSITION</field>
+</shadow>
+</value>
+<next>
+<block type="dcMotor_setProperty_Number" id="nO~AE{GU/s2BV,#Sg$Xz">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">Power</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="math_number" id="Sc;8iSYCZ(MB87bb(u@`">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="GUph5(Qu~kEhfG=NqH[]">
+<field name="VAR" id=";hB6x{lEE9~%ZK,$iK:7">DRIVE_SPEED</field>
+</block>
+</value>
+<next>
+<block type="dcMotor_setProperty_Number" id="6+1{HQk4V)!$r8nUjJ%*">
+<field name="IDENTIFIER">right_driveAsDcMotor</field>
+<field name="PROP">Power</field>
+<data>{"IDENTIFIER":"right_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"right_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"right_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="math_number" id="#n063s0e01L9}l6fG=|L">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="7BV9(,`71!mvUKh};IRv">
+<field name="VAR" id=";hB6x{lEE9~%ZK,$iK:7">DRIVE_SPEED</field>
+</block>
+</value>
+<next>
+<block type="controls_if" id="dtBW*pOB?T?x`U2GKmNj">
+<value name="IF0">
+<block type="logic_compare" id="Ni=$akKVj)L[*%#TCa3b">
+<field name="OP">GT</field>
+<value name="A">
+<block type="math_single" id="F$vBVyU[$[@qu;Z(KhL]">
+<field name="OP">ABS</field>
+<value name="NUM">
+<shadow type="math_number" id="eM;z~u~u[@{lnO#?%#S!">
+<field name="NUM">9</field>
+</shadow>
+<block type="math_arithmetic" id="@Y8_cZj?LI+n|Daq:gss">
+<field name="OP">MINUS</field>
+<value name="A">
+<shadow type="math_number" id="ty1!(]n*J9,?z/Mlf:.Y">
+<field name="NUM">1</field>
+</shadow>
+<block type="dcMotor_getProperty_Number" id=",_l+RwR5b.aVQt[t9]5|">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">TargetPosition</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+</block>
+</value>
+<value name="B">
+<shadow type="math_number" id="Xq2^lGhmrEg+iMOG1RhZ">
+<field name="NUM">1</field>
+</shadow>
+<block type="dcMotor_getProperty_Number" id="N!e|U}{]}2AHb=mg7(,h">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">CurrentPosition</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+</block>
+</value>
+</block>
+</value>
+</block>
+</value>
+<value name="B">
+<block type="math_arithmetic" id="/rrQC9NaFM6#2i|AcdDi">
+<field name="OP">MULTIPLY</field>
+<value name="A">
+<shadow type="math_number" id="7RGZCi:CJ9KIRECh^/{d">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="=s0k:KfvIZ3!?ymlfGh|">
+<field name="VAR" id="lQaI@JFXkw95i+{(fo^`">DRIVE_TOLERANCE</field>
+</block>
+</value>
+<value name="B">
+<shadow type="math_number" id=";wX!9uQfKu_vP%~!JZ{%">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="7PE;6EyUre9W]5z==n7*">
+<field name="VAR" id="7P)rj);{=IWl{d,Yjg?}">TICKS_PER_INCH</field>
+</block>
+</value>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO0">
+<block type="elapsedTime2_reset" id="H,[Yr)IeZ}EDAqG,1Lep">
+<value name="ELAPSED_TIME">
+<block type="variables_get" id="#!bX{NjS:pv*o~Thl3^m">
+<field name="VAR" id="iyi=$,jIh{9jRd7_fP:W">driveTimer</field>
+</block>
+</value>
+</block>
+</statement>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</statement>
+<value name="RETURN">
+<block type="logic_compare" id="`S^Y+Na]/!O{8AXE2!Lr">
+<field name="OP">GT</field>
+<value name="A">
+<block type="elapsedTime2_getProperty_Number" id="iJ=p~0Q~7Dihl?WWEdiD">
+<field name="PROP">Seconds</field>
+<value name="ELAPSED_TIME">
+<block type="variables_get" id=",-[C@|q.ER-{Xp_t[(IQ">
+<field name="VAR" id="iyi=$,jIh{9jRd7_fP:W">driveTimer</field>
+</block>
+</value>
+</block>
+</value>
+<value name="B">
+<block type="variables_get" id="HpgJUJqFfSL4a+QpkR_U">
+<field name="VAR" id="v)^?2P!;29$x)=@0hrAW">holdSeconds</field>
+</block>
+</value>
+</block>
+</value>
+</block>
+<block type="procedures_defreturn" id="kA[33m/@dOu[FD)wotSp" x="504" y="1211">
+<field name="NAME">rotate</field>
+<comment pinned="false" h="80" w="160">Describe this function...</comment>
+<statement name="STACK">
+<block type="variables_set" id="SmZe%/?!RpVZxK_/qq*w">
+<field name="VAR" id="47t4-[rJjQ6-J|Lf%-v1">rotationTargetTicks</field>
+<value name="VALUE">
+<block type="math_arithmetic" id="Fr@d+/T0A-Fzl3iz2z5K">
+<field name="OP">MULTIPLY</field>
+<value name="A">
+<shadow type="math_number" id="NMVYT,+`3Cd.|Ub{UC~I">
+<field name="NUM">1</field>
+</shadow>
+<block type="navigation_angleUnit_convert" id="nwhnsv^~U)1vHa}SEj1Y">
+<field name="ANGLE_UNIT_TYPE">angleUnit</field>
+<value name="ANGLE">
+<shadow type="math_number" id="K-V*K?k7fTJSYgqV}wng">
+<field name="NUM">3.14</field>
+</shadow>
+<block type="variables_get" id="$)Hl$Z+E^YsEN-bpfd,8">
+<field name="VAR" id="M8EMAoji*(C6up%%kuAZ">robotRotateAngle</field>
+</block>
+</value>
+<value name="FROM_ANGLE_UNIT">
+<shadow type="navigation_typedEnum_angleUnit" id="4]ikY#yGa)-]TpGk-g8`">
+<field name="ANGLE_UNIT">DEGREES</field>
+</shadow>
+</value>
+<value name="TO_ANGLE_UNIT">
+<shadow type="navigation_typedEnum_angleUnit" id=".fgbkw`q!v8hQ]R#i{05">
+<field name="ANGLE_UNIT">RADIANS</field>
+</shadow>
+</value>
+</block>
+</value>
+<value name="B">
+<shadow type="math_number" id="bg|Oy0T/C3n$:C:,,~#=">
+<field name="NUM">1</field>
+</shadow>
+<block type="math_arithmetic" id="rQre4jk7J!MC`w*u5MAM">
+<field name="OP">DIVIDE</field>
+<value name="A">
+<shadow type="math_number" id="89MGP=ov9fH_8O%xlrBU">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="Y|i5RI9|NTr.V`IAut`X">
+<field name="VAR" id=".1jHP[]ZEXIL8D7ilE7v">TRACK_WIDTH_INCHES</field>
+</block>
+</value>
+<value name="B">
+<shadow type="math_number" id="=@VNWDffw|t$K7HSXgX,">
+<field name="NUM">1</field>
+</shadow>
+<block type="math_number" id="JeYai=u1Imirz=YEh^J9">
+<field name="NUM">2</field>
+</block>
+</value>
+</block>
+</value>
+</block>
+</value>
+<next>
+<block type="dcMotor_setProperty_Number" id="NGsGNnhjsYsY7Sw`+phO">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">TargetPosition</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="math_number" id="*d,cf(q:w,dllGr/s(aq">
+<field name="NUM">0</field>
+</shadow>
+<block type="math_single" id="w+s{/@sB1CCeO:*=q}w#">
+<field name="OP">NEG</field>
+<value name="NUM">
+<shadow type="math_number" id="^UeFQl~hwAxAQ}M5dj$U">
+<field name="NUM">9</field>
+</shadow>
+<block type="math_arithmetic" id="-5h2wgby!Q*6^v5H@Q#6">
+<field name="OP">MULTIPLY</field>
+<value name="A">
+<shadow type="math_number" id="OT/B6?Z%G!iQG`fY;APY">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="l21iSu0~*BaU|Kp)eV4;">
+<field name="VAR" id="7P)rj);{=IWl{d,Yjg?}">TICKS_PER_INCH</field>
+</block>
+</value>
+<value name="B">
+<shadow type="math_number" id="]a23l06]%AL5{S^jAUQx">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="2zU,{JdBup=jkbl-JP1|">
+<field name="VAR" id="47t4-[rJjQ6-J|Lf%-v1">rotationTargetTicks</field>
+</block>
+</value>
+</block>
+</value>
+</block>
+</value>
+<next>
+<block type="dcMotor_setProperty_Number" id="vGSUhPP!%s9uMs$1wz/=">
+<field name="IDENTIFIER">right_driveAsDcMotor</field>
+<field name="PROP">TargetPosition</field>
+<data>{"IDENTIFIER":"right_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"right_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"right_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="math_number" id="H.[Z(a1hk3Id[moQ4*hQ">
+<field name="NUM">0</field>
+</shadow>
+<block type="math_arithmetic" id="BTTRRPqmHQju3Ai@Wb*k">
+<field name="OP">MULTIPLY</field>
+<value name="A">
+<shadow type="math_number">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="vLLcBHWGMSHA.LmcyJEm">
+<field name="VAR" id="7P)rj);{=IWl{d,Yjg?}">TICKS_PER_INCH</field>
+</block>
+</value>
+<value name="B">
+<shadow type="math_number">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="G8ef57{XaR~XDpmILtv]">
+<field name="VAR" id="47t4-[rJjQ6-J|Lf%-v1">rotationTargetTicks</field>
+</block>
+</value>
+</block>
+</value>
+<next>
+<block type="dcMotor_setProperty_RunMode" id="D^fih);/Kag)xxiY`QhB">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">Mode</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_runMode" id="Y5:i`CY|`_G_j`CGB9S/">
+<field name="RUN_MODE">RUN_TO_POSITION</field>
+</shadow>
+</value>
+<next>
+<block type="dcMotor_setProperty_RunMode" id="y2CGiFK6gXj_)^7j*=vU">
+<field name="IDENTIFIER">right_driveAsDcMotor</field>
+<field name="PROP">Mode</field>
+<data>{"IDENTIFIER":"right_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"right_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"right_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="dcMotor_typedEnum_runMode" id="PmohN-iH/v]8STSYRJm7">
+<field name="RUN_MODE">RUN_TO_POSITION</field>
+</shadow>
+</value>
+<next>
+<block type="dcMotor_setProperty_Number" id="+};5HL25-x@yhZcT`2wh">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">Power</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="math_number">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="^bqHQfd+n`x7eU*?Fs0P">
+<field name="VAR" id="qK`G6fdDE%x_#YrQ3Cf~">ROTATE_SPEED</field>
+</block>
+</value>
+<next>
+<block type="dcMotor_setProperty_Number" id="npBrhp-+SPm];lVg2+x(">
+<field name="IDENTIFIER">right_driveAsDcMotor</field>
+<field name="PROP">Power</field>
+<data>{"IDENTIFIER":"right_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"right_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"right_drive\",\nor select a device that is in the current robot configuration."}</data>
+<value name="VALUE">
+<shadow type="math_number">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="vedDt:$kS=0fyt~-`J$n">
+<field name="VAR" id="qK`G6fdDE%x_#YrQ3Cf~">ROTATE_SPEED</field>
+</block>
+</value>
+<next>
+<block type="controls_if" id="[nQbnEQ2rS1u#k.k1RxW">
+<value name="IF0">
+<block type="logic_compare" id="s;GJ5wa.eCL!hVN_m=H|">
+<field name="OP">GT</field>
+<value name="A">
+<block type="math_single" id="gknw0lX(4,K_ZOkl/u6B">
+<field name="OP">ABS</field>
+<value name="NUM">
+<shadow type="math_number">
+<field name="NUM">9</field>
+</shadow>
+<block type="math_arithmetic" id="@h[A/RI#(emFIH4;(Q!S">
+<field name="OP">MINUS</field>
+<value name="A">
+<shadow type="math_number">
+<field name="NUM">1</field>
+</shadow>
+<block type="dcMotor_getProperty_Number" id=".hg:,iGA0jt[PugQeY:y">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">TargetPosition</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+</block>
+</value>
+<value name="B">
+<shadow type="math_number">
+<field name="NUM">1</field>
+</shadow>
+<block type="dcMotor_getProperty_Number" id="U{Q9,*VH@=c.@PGnp3*F">
+<field name="IDENTIFIER">left_driveAsDcMotor</field>
+<field name="PROP">CurrentPosition</field>
+<data>{"IDENTIFIER":"left_drive","block_warning_hidden":false,"block_warning_text":"There is no DcMotor named \"left_drive\" in the current robot configuration.\nPlease activate the configuration that contains the DcMotor named \"left_drive\",\nor select a device that is in the current robot configuration."}</data>
+</block>
+</value>
+</block>
+</value>
+</block>
+</value>
+<value name="B">
+<block type="math_arithmetic" id="fG).lnB#aR4/=6VOT8s8">
+<field name="OP">MULTIPLY</field>
+<value name="A">
+<shadow type="math_number">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="2_S]V3@nriIyfbCqT%.$">
+<field name="VAR" id="lQaI@JFXkw95i+{(fo^`">DRIVE_TOLERANCE</field>
+</block>
+</value>
+<value name="B">
+<shadow type="math_number">
+<field name="NUM">1</field>
+</shadow>
+<block type="variables_get" id="0JiR[+ISISIz`?0?%D,N">
+<field name="VAR" id="7P)rj);{=IWl{d,Yjg?}">TICKS_PER_INCH</field>
+</block>
+</value>
+</block>
+</value>
+</block>
+</value>
+<statement name="DO0">
+<block type="elapsedTime2_reset" id="nA@Rh)u]5n8Tjb,!Nnsw">
+<value name="ELAPSED_TIME">
+<block type="variables_get" id="Z@mVRGbCzO(^]Rh]g50Q">
+<field name="VAR" id="iyi=$,jIh{9jRd7_fP:W">driveTimer</field>
+</block>
+</value>
+</block>
+</statement>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</next>
+</block>
+</statement>
+<value name="RETURN">
+<block type="logic_compare" id="K52-mi}3B{9Q~%5G*_3#">
+<field name="OP">GT</field>
+<value name="A">
+<block type="elapsedTime2_getProperty_Number" id="XKt`FYz]JhCzAk(/3;wu">
+<field name="PROP">Seconds</field>
+<value name="ELAPSED_TIME">
+<block type="variables_get" id="hJCeEunmT2/ItMNBc|w+">
+<field name="VAR" id="iyi=$,jIh{9jRd7_fP:W">driveTimer</field>
+</block>
+</value>
+</block>
+</value>
+<value name="B">
+<block type="variables_get" id="*ffDQU+Onn^q0239}Z[d">
+<field name="VAR" id="v)^?2P!;29$x)=@0hrAW">holdSeconds</field>
+</block>
+</value>
+</block>
+</value>
+</block>
+</xml>
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<Extra>
+<OpModeMeta flavor="AUTONOMOUS" group="" autoTransition="" />
+<Enabled value="true" />
+</Extra>
