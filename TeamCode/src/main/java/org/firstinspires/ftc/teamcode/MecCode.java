@@ -83,12 +83,12 @@ public class MecCode extends LinearOpMode {
 
 // Set motor directions and calculate powers
             if (driveMode == 0) {
-
+// use a double equal sign when puting a variable in the if statment
                 frontLeft.setDirection(DcMotor.Direction.FORWARD);
                 bl.setDirection(DcMotor.Direction.FORWARD);
                 fr.setDirection(DcMotor.Direction.FORWARD);
                 br.setDirection(DcMotor.Direction.REVERSE);
-
+//kinematics
                 frontLeftPower = power + powerst + turn;
                 blPower = power - powerst + turn;
                 frPower = power - powerst - turn;
