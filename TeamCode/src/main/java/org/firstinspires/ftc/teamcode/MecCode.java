@@ -53,7 +53,7 @@ public class MecCode extends LinearOpMode {
         backRight.setDirection(DcMotor.Direction.REVERSE);
         RightFeeder.setDirection(Servo.Direction.FORWARD);
         LeftFeeder.setDirection(Servo.Direction.REVERSE);
-// double means numbers
+// double means numbers including decimals
         double driveMode = 0;
         double maxPower = 0.5;
 //only play code when start is pressed
