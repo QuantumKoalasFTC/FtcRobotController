@@ -12,11 +12,11 @@ public class MecCode extends LinearOpMode {
     // All motors in starting position which is null or zero.
     public DcMotor frontLeft = null;
 
-    public DcMotor bl = null;
+    public DcMotor backLeft = null;
 
-    public DcMotor fr = null;
+    public DcMotor frontRight = null;
 
-    public DcMotor br = null;
+    public DcMotor backRight = null;
 
     public DcMotor ShooterMotor = null;
 
@@ -32,9 +32,9 @@ public class MecCode extends LinearOpMode {
     public void runOpMode() {
 
         frontLeft = hardwareMap.get(DcMotor.class, "left_front_drive");
-        bl = hardwareMap.get(DcMotor.class, "left_back_drive");
-        fr = hardwareMap.get(DcMotor.class, "right_front_drive");
-        br = hardwareMap.get(DcMotor.class, "right_back_drive");
+        backLeft = hardwareMap.get(DcMotor.class, "left_back_drive");
+        frontRight = hardwareMap.get(DcMotor.class, "right_front_drive");
+        backLeft = hardwareMap.get(DcMotor.class, "right_back_drive");
         ShooterMotor = hardwareMap.get(DcMotor.class, "ShooterMotor");
         IntakeMotor = hardwareMap.get(DcMotor.class, "intake");
         RightFeeder = hardwareMap.get(Servo.class, "right_intake_servo");
@@ -42,15 +42,15 @@ public class MecCode extends LinearOpMode {
         windmill = hardwareMap.get(CRServo.class, "windmill");
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
-        fr.setDirection(DcMotor.Direction.FORWARD);
-        bl.setDirection(DcMotor.Direction.FORWARD);
-        fr.setDirection(DcMotor.Direction.FORWARD);
-        br.setDirection(DcMotor.Direction.REVERSE);
+// Question: Is there supposed ot be two (fr)s because one of them should be fl(frontleft)
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
 
         LeftFeeder.setDirection(Servo.Direction.REVERSE);
 // double means numbers
@@ -65,11 +65,11 @@ public class MecCode extends LinearOpMode {
             double turn = gamepad1.right_stick_x;
             double powerst = gamepad1.left_stick_x;
             double power = -gamepad1.left_stick_y;
-
+//
             double frontLeftPower = 0;
-            double frPower = 0;
-            double blPower = 0;
-            double brPower = 0;
+            double frontRightPower = 0;
+            double backLeftPower = 0;
+            double backRightPower = 0;
 //defining gamepad controls
             if (gamepad1.dpad_up) {
                 driveMode = 0;
@@ -83,16 +83,16 @@ public class MecCode extends LinearOpMode {
 
 // Set motor directions and calculate powers
             if (driveMode == 0) {
-// use a double equal sign when puting a variable in the if statment
+// use a double equal sign when puting a variable in a if statment
                 frontLeft.setDirection(DcMotor.Direction.FORWARD);
-                bl.setDirection(DcMotor.Direction.FORWARD);
-                fr.setDirection(DcMotor.Direction.FORWARD);
-                br.setDirection(DcMotor.Direction.REVERSE);
+                backLeft.setDirection(DcMotor.Direction.FORWARD);
+                frontRight.setDirection(DcMotor.Direction.FORWARD);
+                backRight.setDirection(DcMotor.Direction.REVERSE);
 //kinematics
                 frontLeftPower = power + powerst + turn;
-                blPower = power - powerst + turn;
-                frPower = power - powerst - turn;
-                brPower = power + powerst - turn;
+                backLeftPower = power - powerst + turn;
+                frontRightPower = power - powerst - turn;
+                backRightPower = power + powerst - turn;
 
             }
 
@@ -101,29 +101,28 @@ public class MecCode extends LinearOpMode {
             if (driveMode == 1) {
 
                 frontLeft.setDirection(DcMotor.Direction.REVERSE);
-                bl.setDirection(DcMotor.Direction.REVERSE);
-                fr.setDirection(DcMotor.Direction.REVERSE);
-                br.setDirection(DcMotor.Direction.FORWARD);
+                backLeft.setDirection(DcMotor.Direction.REVERSE);
+                frontRight.setDirection(DcMotor.Direction.REVERSE);
+                backRight.setDirection(DcMotor.Direction.FORWARD);
 
                 frontLeftPower = power + powerst - turn;
-                blPower = power - powerst - turn;
-                frPower = power - powerst + turn;
-                brPower = power + powerst + turn;
+                backLeftPower = power - powerst - turn;
+                frontRightPower = power - powerst + turn;
+                backRightPower = power + powerst + turn;
 
             }
 
             if (driveMode == 2) {
 
                 frontLeft.setDirection(DcMotor.Direction.REVERSE);
-                bl.setDirection(DcMotor.Direction.FORWARD);
-                fr.setDirection(DcMotor.Direction.FORWARD);
-                br.setDirection(DcMotor.Direction.FORWARD);
+                backLeft.setDirection(DcMotor.Direction.FORWARD);
+                frontRight.setDirection(DcMotor.Direction.FORWARD);
+                backRight.setDirection(DcMotor.Direction.FORWARD);
 
                 frontLeftPower = -power + powerst - turn;
-
-                blPower = -power - powerst + turn;
-                frPower = -power - powerst - turn;
-                brPower = -power + powerst + turn;
+                backLeftPower = -power - powerst + turn;
+                frontRightPower = -power - powerst - turn;
+                backRightPower = -power + powerst + turn;
 
 
             }
@@ -131,31 +130,31 @@ public class MecCode extends LinearOpMode {
             if (driveMode == 3) {
 
                 frontLeft.setDirection(DcMotor.Direction.FORWARD);
-                bl.setDirection(DcMotor.Direction.REVERSE);
-                fr.setDirection(DcMotor.Direction.REVERSE);
-                br.setDirection(DcMotor.Direction.REVERSE);
+                backLeft.setDirection(DcMotor.Direction.REVERSE);
+                frontRight.setDirection(DcMotor.Direction.REVERSE);
+                backLeft.setDirection(DcMotor.Direction.REVERSE);
 
                 frontLeftPower = -power + powerst + turn;
-                blPower = -power - powerst -turn;
-                frPower = -power - powerst + turn;
-                brPower = -power + powerst - turn;
+                backLeftPower = -power - powerst -turn;
+                frontRightPower = -power - powerst + turn;
+                backRightPower = -power + powerst - turn;
 
             }
 
 //CHANGE
 
             frontLeftPower = power + powerst + turn;
-            blPower = power - powerst + turn;
-            frPower = power - powerst - turn;
-            brPower = power + powerst - turn;
+            backLeftPower = power - powerst + turn;
+            frontRightPower = power - powerst - turn;
+            backRightPower = power + powerst - turn;
 
 //this allows it to slow down without immediately braking
             double slow = 1.2 + -gamepad1.right_trigger;
 
             frontLeft.setPower(frontLeftPower * slow);
-            bl.setPower(blPower * slow);
-            fr.setPower(frPower * slow);
-            br.setPower(brPower * slow);
+            backLeft.setPower(backLeftPower * slow);
+            frontRight.setPower(frontRightPower * slow);
+            backRight.setPower(backRightPower * slow);
 
             if (gamepad1.a) {
                 IntakeMotor.setPower(1);
