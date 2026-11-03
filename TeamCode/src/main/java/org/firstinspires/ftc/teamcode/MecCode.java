@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode;
-//importing all of our code
+//Telling the code to fetch all the rules or information from the following places:
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -46,12 +46,12 @@ public class MecCode extends LinearOpMode {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-// Question: Is there supposed ot be two (fr)s because one of them should be fl(frontleft)
+// Fixed the missing right feeder and the double fl (probably a typo)
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.REVERSE);
-
+        RightFeeder.setDirection(Servo.Direction.FORWARD);
         LeftFeeder.setDirection(Servo.Direction.REVERSE);
 // double means numbers
         double driveMode = 0;
