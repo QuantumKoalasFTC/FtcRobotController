@@ -25,7 +25,7 @@ public class Task extends LinearOpMode {
 
     private final Pose start = poseFactory.of(0, 0, 0);
     private final Pose point1 = poseFactory.of(0, 20, -90);
-    private final Pose point2 = poseFactory.of(20, 0, -90);
+    private final Pose point2 = poseFactory.of(20, 20, -90);
 
 
 
