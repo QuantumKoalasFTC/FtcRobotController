@@ -1,12 +1,3 @@
-/* ============================================================= *
- *                 Turtle Tracer — Auto-Generated                *
- *                                                               *
- *  Version: 2.7.0.                                              *
- *  Copyright (c) 2026 Matthew Allen                             *
- *                                                               *
- *  THIS FILE IS AUTO-GENERATED — DO NOT EDIT MANUALLY.          *
- *  Changes will be overwritten when regenerated.                *
- * ============================================================= */
 
 package org.firstinspires.ftc.teamcode.Auton;
 
@@ -46,7 +37,7 @@ public class AutoCodeV1 extends OpMode {
         panelsTelemetry.update(telemetry);
 
         follower = Constants.create(hardwareMap);
-        follower.setPose(p.of(136.000, 35.898, -159.071));
+        follower.setPose(p.of(136.000, 35.898, -139.588));
 
         pathTimer = new ElapsedTime();
         paths = new Paths(follower); // Build paths
@@ -76,7 +67,7 @@ public class AutoCodeV1 extends OpMode {
                     p.of(136.000, 35.898, 0.0),
                     p.of(93.692, 19.717, 0.0),
                     p.of(95.000, 10.000, 0.0)
-            ).tangent();
+            ).facingPoint(p.of(95.975, 1.819, 0.0));
 
             Park = curve(
                     p.of(95.000, 10.000, 0.0),
