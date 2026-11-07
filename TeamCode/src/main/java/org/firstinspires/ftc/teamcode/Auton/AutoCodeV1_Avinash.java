@@ -1,12 +1,3 @@
-/* ============================================================= *
- *                 Turtle Tracer — Auto-Generated                *
- *                                                               *
- *  Version: 2.7.0.                                              *
- *  Copyright (c) 2026 Matthew Allen                             *
- *                                                               *
- *  THIS FILE IS AUTO-GENERATED — DO NOT EDIT MANUALLY.          *
- *  Changes will be overwritten when regenerated.                *
- * ============================================================= */
 
 package org.firstinspires.ftc.teamcode.Auton;
 
@@ -19,9 +10,7 @@ import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.math.Pose;
 import com.pedropathing.paths.Path;
-import com.pedropathing.paths.interpolator.Interpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -29,7 +18,7 @@ import org.firstinspires.ftc.teamcode.PedroSetup.Constants;
 
 @Autonomous
 @Configurable // Panels
-public class AutoCodeV1 extends OpMode {
+public class AutoCodeV1_Avinash extends OpMode {
 
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
     public Follower follower; // Pathing follower instance
@@ -46,7 +35,7 @@ public class AutoCodeV1 extends OpMode {
         panelsTelemetry.update(telemetry);
 
         follower = Constants.create(hardwareMap);
-        follower.setPose(p.of(136.000, 35.898, -159.071));
+        follower.setPose(p.of(136.000, 35.898, -139.588));
 
         pathTimer = new ElapsedTime();
         paths = new Paths(follower); // Build paths
@@ -76,7 +65,7 @@ public class AutoCodeV1 extends OpMode {
                     p.of(136.000, 35.898, 0.0),
                     p.of(93.692, 19.717, 0.0),
                     p.of(95.000, 10.000, 0.0)
-            ).tangent();
+            ).facingPoint(p.of(95.975, 1.819, 0.0));
 
             Park = curve(
                     p.of(95.000, 10.000, 0.0),
