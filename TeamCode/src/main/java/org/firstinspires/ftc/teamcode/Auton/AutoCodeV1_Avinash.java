@@ -1,4 +1,8 @@
-
+/* This code basically starts at the base for blue and then moves really close to the flower and shoots the 4 preloaded balls.
+Then it steals from the flowers as the intake is already in the direction of the flower and then shoots those 4 balls.
+After that it goes parks back in the blue spot.
+This has yet not been tested.(Changes are required most likely.)
+ */
 package org.firstinspires.ftc.teamcode.Auton;
 
 import static com.pedropathing.api.Paths.curve;
