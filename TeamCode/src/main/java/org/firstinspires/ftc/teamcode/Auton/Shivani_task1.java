@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.PedroSetup.Constants;
 
-@Autonomous
+@Autonomous(name = "Shivani_task1")
 public class Shivani_task1 extends LinearOpMode {
 
     private Follower follower;
@@ -25,21 +25,13 @@ public class Shivani_task1 extends LinearOpMode {
 
     private final Pose start = poseFactory.of(0, 0, 0);
     private final Pose point1 = poseFactory.of(20, 0, 0);
-
-    private  final Pose point2 = poseFactory.of(20, 20, 90);
-
-
+    private final Pose point2 = poseFactory.of(20, 20, 90);
 
     // Autonomous routine
     public Command autoRoutine() {
         return sequential(
                 follow(follower, path1()),
                 follow(follower, path2())
-
-
-
-
-
         );
     }
 
@@ -72,21 +64,9 @@ public class Shivani_task1 extends LinearOpMode {
 
     public Path path1() {
         return line(start, point1).tangent();
-        }
-
     }
 
     public Path path2() {
         return line(point1, point2).tangent();
     }
-
-
-
-
-
-
 }
-
-
-
-

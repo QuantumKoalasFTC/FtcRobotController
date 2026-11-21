@@ -1,18 +1,7 @@
-/* ============================================================= *
- *                 Turtle Tracer — Auto-Generated                *
- *                                                               *
- *  Version: 2.7.0.                                              *
- *  Copyright (c) 2026 Matthew Allen                             *
- *                                                               *
- *  THIS FILE IS AUTO-GENERATED — DO NOT EDIT MANUALLY.          *
- *  Changes will be overwritten when regenerated.                *
- * ============================================================= */
-
 package org.firstinspires.ftc.teamcode.Auton;
 
 import static com.pedropathing.api.Paths.curve;
 import static com.pedropathing.api.Paths.line;
-import static com.pedropathing.api.Paths.path;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -25,21 +14,20 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.PedroSetup.Constants;
 
-@Autonomous
-@Configurable // Panels
+@Autonomous(name = "Circle_Avinash")
+@Configurable
 public class Circle_Avinash extends OpMode {
 
-    private TelemetryManager panelsTelemetry; // Panels Telemetry instance
-    public Follower follower; // Pathing follower instance
+    private TelemetryManager panelsTelemetry;
+    public Follower follower;
     private final PoseFactory p = PoseFactory.degrees();
-    private int pathState; // Current autonomous path state (state machine)
-    private ElapsedTime pathTimer; // Timer for path state machine
-    private Paths paths; // Paths defined in the Paths class
+    private int pathState;
+    private ElapsedTime pathTimer;
+    private Paths paths;
 
     @Override
     public void init() {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
-        // ...
         panelsTelemetry.debug("Status", "Initialized");
         panelsTelemetry.update(telemetry);
 
@@ -47,15 +35,15 @@ public class Circle_Avinash extends OpMode {
         follower.setPose(p.of(9.000, 25.000, 0.000));
 
         pathTimer = new ElapsedTime();
-        paths = new Paths(follower); // Build paths
+        paths = new Paths(follower);
+        setPathState(0);
     }
 
     @Override
     public void loop() {
-        follower.update(); // Update follower
-        pathState = autonomousPathUpdate(); // Update autonomous state machine
+        follower.update(); // <-- THIS WAS MISSING! Keeps the robot moving
+        pathState = autonomousPathUpdate();
 
-        // Log values to Panels and Driver Station
         panelsTelemetry.debug("Path State", pathState);
         panelsTelemetry.debug("X", follower.pose().x());
         panelsTelemetry.debug("Y", follower.pose().y());
