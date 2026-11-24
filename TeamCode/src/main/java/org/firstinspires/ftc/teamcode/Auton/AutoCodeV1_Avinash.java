@@ -10,7 +10,7 @@ import static com.pedropathing.api.Paths.line;
 import static com.pedropathing.api.Paths.path;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.bylazar.telemetry.PanelsTelemetry;
+
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
@@ -21,10 +21,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.PedroSetup.Constants;
 
 @Autonomous
-@Configurable // Panels
 public class AutoCodeV1_Avinash extends OpMode {
 
-    private TelemetryManager panelsTelemetry; // Panels Telemetry instance
+    // Panels Telemetry instance
     public Follower follower; // Pathing follower instance
     private final PoseFactory p = PoseFactory.degrees();
     private int pathState; // Current autonomous path state (state machine)
@@ -33,10 +32,7 @@ public class AutoCodeV1_Avinash extends OpMode {
 
     @Override
     public void init() {
-        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
-        // ...
-        panelsTelemetry.debug("Status", "Initialized");
-        panelsTelemetry.update(telemetry);
+
 
         follower = Constants.create(hardwareMap);
         follower.setPose(p.of(136.000, 35.898, -139.588));
@@ -51,11 +47,7 @@ public class AutoCodeV1_Avinash extends OpMode {
         pathState = autonomousPathUpdate(); // Update autonomous state machine
 
         // Log values to Panels and Driver Station
-        panelsTelemetry.debug("Path State", pathState);
-        panelsTelemetry.debug("X", follower.pose().x());
-        panelsTelemetry.debug("Y", follower.pose().y());
-        panelsTelemetry.debug("Heading", follower.pose().heading());
-        panelsTelemetry.update(telemetry);
+
     }
 
     public static class Paths {
